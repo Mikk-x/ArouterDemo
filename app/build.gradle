@@ -26,17 +26,17 @@ android {
 
 //    signingConfigs {
 //        keystore {
-//            keyAlias 'chainCloud'
-//            keyPassword 'jiehui2018'
-//            storeFile file('/Users/easypay/Mikk/chain_cloud.jks')
-//            storePassword 'jiehui2018'
+//            keyAlias 'null'
+//            keyPassword 'null'
+//            storeFile file('null')
+//            storePassword 'null'
 //            v2SigningEnabled false
 //        }
 //    }
     buildTypes {
         release {
             //线上环境
-            buildConfigField 'String', 'BASE_URL', '"http://140.143.250.163:8080/"'
+            buildConfigField 'String', 'BASE_URL', '"null"'
             debuggable false
             zipAlignEnabled true
             minifyEnabled true//混淆
@@ -46,8 +46,7 @@ android {
         }
         debug {
             //测试环境
-            buildConfigField 'String', 'BASE_URL', '"http://140.143.250.163:8080/"'
-//            buildConfigField 'String', 'BASE_URL', '"http://192.168.50.120:8080/"'
+            buildConfigField 'String', 'BASE_URL', '"null"'
             debuggable true
             zipAlignEnabled false
             minifyEnabled false//不混淆
