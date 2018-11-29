@@ -1,0 +1,98 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+android {
+
+    compileSdkVersion rootProject.ext.versions.compileSdkVersion
+    buildToolsVersion rootProject.ext.versions.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.versions.minSdkVersion
+        targetSdkVersion rootProject.ext.versions.targetSdkVersion
+        versionCode rootProject.ext.versions.versionCode
+        versionName rootProject.ext.versions.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //MultiDex分包方法
+        multiDexEnabled true
+
+        //Arouter路由配置
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                includeCompileClasspath = true
+            }
+        }
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+//    //防止编译的时候oom、GC
+//    dexOptions {
+//        javaMaxHeapSize "4g"
+//    }
+
+}
+
+dependencies {
+    // 在项目中的libs中的所有的.jar结尾的文件，都是依赖
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //把implementation 用api代替,它是对外部公开的, 所有其他的module就不需要添加该依赖
+    api rootProject.ext.dependencies["appcompat_v7"]
+    api rootProject.ext.dependencies["constraint_layout"]
+    api rootProject.ext.dependencies["runner"]
+    api rootProject.ext.dependencies["espresso_core"]
+    api rootProject.ext.dependencies["junit"]
+    api rootProject.ext.dependencies["support_annotations"]
+    api rootProject.ext.dependencies["design"]
+    api rootProject.ext.dependencies["support-v4"]
+    api rootProject.ext.dependencies["cardview-v7"]
+    api rootProject.ext.dependencies["recyclerview-v7"]
+    //   retrofit2+ OkHttp  3.12.0    2.5.0     2.1.0
+    api rootProject.ext.dependencies["okhttp3"]
+    api rootProject.ext.dependencies["okhttp3Logging"]
+    api rootProject.ext.dependencies["retrofit2"]
+    api rootProject.ext.dependencies["retrofit2Converter"]
+    api rootProject.ext.dependencies["retrofit2AdapterRxjava"]
+    api rootProject.ext.dependencies["okio"]
+    // RxJava+RxAndroid   2.2.4   2.1.0   3.0.0
+    api rootProject.ext.dependencies["rxjava2"]
+    api rootProject.ext.dependencies["rxandroid"]
+    api rootProject.ext.dependencies["rxbinding"]
+    //Glide
+    api rootProject.ext.dependencies["glide"]
+    //黄油刀
+    api rootProject.ext.dependencies["butterknife_compiler"]
+    api rootProject.ext.dependencies["butterknife"]
+    //方法数超过65535解决方法64K MultiDex分包方法
+    api rootProject.ext.dependencies["multidex"]
+    //路由
+    api rootProject.ext.dependencies["arouter_api"]
+    api rootProject.ext.dependencies["arouter_compiler"]
+    api rootProject.ext.dependencies["arouter_annotation"]
+    //日志
+    api rootProject.ext.dependencies["logger"]
+    //事件订阅
+    api rootProject.ext.dependencies["eventbus"]
+    // 圆形头像
+    api rootProject.ext.dependencies["circleimageview"]
+    // 下拉刷新 、上拉加载
+    api rootProject.ext.dependencies["smartRefreshLayout"]
+    api rootProject.ext.dependencies["smartRefreshHeader"]
+    // leakcanary
+//    api rootProject.ext.dependencies["leakcanaryDebug"]
+//    api rootProject.ext.dependencies["leakcanaryRelease"]
+    // baseAdapter  2.9.34
+    api rootProject.ext.dependencies["baseRecyclerViewAdapterHelper"]
+    // fragmentation  1.3.6
+    api rootProject.ext.dependencies["fragmentation"]
+    // RxLifecycle 3.0.0
+    api rootProject.ext.dependencies["rxlifecycle"]
+    implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1352_43618_sharewithdownload_withoutGame_obfs_20180918_120327.jar')
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+}

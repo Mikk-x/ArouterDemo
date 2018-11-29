@@ -1,0 +1,97 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.versions.compileSdkVersion
+    buildToolsVersion rootProject.ext.versions.buildToolsVersion
+
+    defaultConfig {
+        applicationId rootProject.ext.versions.applicationId
+        minSdkVersion rootProject.ext.versions.minSdkVersion
+        targetSdkVersion rootProject.ext.versions.targetSdkVersion
+        versionCode rootProject.ext.versions.versionCode
+        versionName rootProject.ext.versions.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        //MultiDex分包方法
+        multiDexEnabled true
+
+        //Arouter路由配置
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+                includeCompileClasspath = true
+            }
+        }
+
+    }
+
+//    signingConfigs {
+//        keystore {
+//            keyAlias 'chainCloud'
+//            keyPassword 'jiehui2018'
+//            storeFile file('/Users/easypay/Mikk/chain_cloud.jks')
+//            storePassword 'jiehui2018'
+//            v2SigningEnabled false
+//        }
+//    }
+    buildTypes {
+        release {
+            //线上环境
+            buildConfigField 'String', 'BASE_URL', '"http://140.143.250.163:8080/"'
+            debuggable false
+            zipAlignEnabled true
+            minifyEnabled true//混淆
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.keystore
+        }
+        debug {
+            //测试环境
+            buildConfigField 'String', 'BASE_URL', '"http://140.143.250.163:8080/"'
+//            buildConfigField 'String', 'BASE_URL', '"http://192.168.50.120:8080/"'
+            debuggable true
+            zipAlignEnabled false
+            minifyEnabled false//不混淆
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            signingConfig signingConfigs.keystore
+        }
+    }
+
+    //打包命名
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            if (variant.name.endsWith("Debug")) {
+                //debug包
+                outputFileName = "chainCloud_v${defaultConfig.versionName}_debug.apk"
+            } else {
+                //release包
+                outputFileName = "chainCloud_v${defaultConfig.versionName}_release.apk"
+            }
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy.force 'com.android.support:support-annotations:27.1.1'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //公用依赖包
+    implementation project(':common_base')
+    //Arouter路由
+//    annotationProcessor rootProject.ext.dependencies["arouter_compiler"]
+    //黄油刀
+//    annotationProcessor rootProject.ext.dependencies["butterknife_compiler"]
+
+    if (!Boolean.valueOf(rootProject.ext.isModule)) {
+        //main模块
+        implementation project(':module_main')
+        implementation project(':module_home')
+        implementation project(':module_control')
+        implementation project(':module_user')
+
+    }
+
+}
