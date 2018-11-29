@@ -37,8 +37,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onActivityCreate(Bundle savedInstanceState) {
-        getSupportActionBar().hide();
-        mHandler.sendEmptyMessageDelayed(1000, 2000);
+//        getSupportActionBar().hide();
+        mHandler.sendEmptyMessageDelayed(1000, 3000);
 
     }
 

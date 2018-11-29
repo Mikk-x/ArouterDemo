@@ -1,6 +1,7 @@
 package com.mikk.module_main.ui.main;
 
 import android.Manifest;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -15,10 +16,15 @@ import com.mikk.common_base.base.BasePresenter;
 import com.mikk.common_base.basemvp.MvpBaseActivity;
 import com.mikk.common_base.constans.ARouterConfig;
 import com.mikk.common_base.utils.ARouterUtils;
+import com.mikk.common_base.utils.ApplicationUtils;
 import com.mikk.common_base.utils.LogUtil;
 import com.mikk.common_base.utils.PermissionsUtils;
+import com.mikk.common_base.utils.ToastUtil;
 import com.mikk.module_main.R;
 import com.mikk.module_main.R2;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import butterknife.BindView;
 
@@ -34,13 +40,12 @@ public class MainActivity extends MvpBaseActivity {
     private String currentTab = ARouterConfig.MAIN_HOME_FRAGMENT;
 
     private Fragment currentFragment;
-    //    /**
-//     * 存放切换Fragment
-//     */
-//    private List<Fragment> mFragmentList = new ArrayList<>();
-//
-//
-//    // 首页Fragment
+
+    private long mBackTime = -1;
+    // 重复点击back time
+    private static final long DIFF_DEFAULT_BACK_TIME = 2000;
+
+    // 首页Fragment
     public BaseFragment homeFragment = ARouterUtils.getFragment(ARouterConfig.MAIN_HOME_FRAGMENT);
     //    // 控件Fragment
     public BaseFragment controlFragment = ARouterUtils.getFragment(ARouterConfig.MAIN_CONTROL_FRAGMENT);
@@ -148,4 +153,29 @@ public class MainActivity extends MvpBaseActivity {
         }
         currentFragment = fragment;
     }
+
+    @Override
+    public void onBackPressedSupport() {
+        long nowTime = System.currentTimeMillis();
+        long diff = nowTime - mBackTime;
+        if (diff >= DIFF_DEFAULT_BACK_TIME) {
+            mBackTime = nowTime;
+            ToastUtil.show("再按一次退出");
+        } else {
+            LinkedList<Activity> activityList = ApplicationUtils.getActivityList();
+            if (null != activityList && activityList.size() > 0) {
+                Iterator iterator = activityList.iterator();
+                while (iterator.hasNext()) {
+                    Activity activity = (Activity) iterator.next();
+                    activity.finish();
+                }
+            }
+            try {
+                System.exit(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

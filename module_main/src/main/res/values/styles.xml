@@ -1,5 +1,20 @@
 <resources>
 
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+        <!--<item name="colorAccent">@color/colorAccent</item>-->
+
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <!--禁止多点触控-->
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+
+    </style>
+
     <!--防止启动白屏处理-->
     <style name="SplashFullScreen" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash</item>//设置背景
